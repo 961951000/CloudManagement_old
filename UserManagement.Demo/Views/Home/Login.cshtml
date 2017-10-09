@@ -1,0 +1,11 @@
+﻿@{
+    ViewBag.Title = "Login";
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+<form action="/Home/Login" method="post">
+    <label for="username">用户名：</label><input type="text" name="username" id="username" placeholder="john@arctron.partner.onmschina.cn" /><br />
+    <label for="password">密码：</label><input type="text" name="password" id="password" placeholder="Password1" /><br />
+    <input type="submit" value="提交" />
+</form>

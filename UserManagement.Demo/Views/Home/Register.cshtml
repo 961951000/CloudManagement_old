@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "Register";
+}
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+<form action="/Home/RegisterApi" method="post">
+    <label for="UserName">用户名：</label><input type="text" name="UserName" id="UserName" placeholder="john@arctron.partner.onmschina.cn" /><br />
+    <label>账号状态：</label>
+    <label><input name="Enabled" type="radio" value="1" checked="checked" />启用 </label>
+    <label><input name="Enabled" type="radio" value="0" />禁用 </label><br />
+    <label for="Password">密码：</label><input type="text" name="Password" id="Password" placeholder="Password1" /><br />
+    <label for="Alias">别名：</label><input type="text" name="Alias" id="Alias" placeholder="约翰" /><br />
+    <label for="JobTitle">职务：</label><input type="text" name="JobTitle" id="JobTitle" placeholder="编辑" /><br />
+    <label for="Department">部门：</label><input type="text" name="Department" id="Department" placeholder="采编" /><br />
+    <label for="StreetAddress">街道地址：</label><input type="text" name="StreetAddress" id="StreetAddress" placeholder="东川路555号" /><br />
+    <label for="City">城市：</label><input type="text" name="City" id="City" placeholder="上海" /><br />
+    <label for="State">省/自治区/直辖市：</label><input type="text" name="State" id="State" placeholder="上海" /><br />
+    <label for="Country">国家或地区：</label><input type="text" name="Country" id="Country" placeholder="中国" /><br />
+    <label for="TelephoneNumber">办公电话：</label><input type="text" name="TelephoneNumber" id="TelephoneNumber" placeholder="12580" /><br />
+    <label for="PostalCode">邮政编码：</label><input type="text" name="PostalCode" id="PostalCode" placeholder="200000" /><br />
+    <label for="Photo">头像：</label><input type="text" name="Photo" id="Photo" placeholder="Files\Uploa\bb4d786633053a0b9c0da20d54ea7e38e8776da4.jpg" /><br />
+    <input type="submit" value="提交" />
+</form>
