@@ -9,12 +9,13 @@ using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
 using UserManagement.Data.Models;
+using System.Configuration;
 
 namespace UserManagement.Demo.Controllers
 {
     public class HomeController : Controller
     {
-        private static readonly string _endpoint = "http://localhost:57506/";
+        private static readonly string _endpoint = ConfigurationManager.AppSettings["UserManagementWebApiUrl"];
         public ActionResult Index()
         {
             return View();
@@ -34,10 +35,10 @@ namespace UserManagement.Demo.Controllers
             return View();
         }
 
-        public ActionResult UserList()
+        public async Task<ActionResult> UserList()
         {
             ViewBag.Message = "用户列表";
-            ViewData["UserList"] = UserListApi().Result;
+            ViewData["UserList"] = await UserListApi();
 
             return View();
         }
@@ -46,6 +47,9 @@ namespace UserManagement.Demo.Controllers
         {
             const string requestUrl = "api/User/AddUser";
 
+            var time = DateTime.Now;
+            user.CreatedOn = time;
+            user.ModifiedOn = time;
             using (var httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = new Uri(_endpoint);
@@ -55,13 +59,6 @@ namespace UserManagement.Demo.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var result = await response.Content.ReadAsStringAsync();
-                    var token = response.Headers.GetValues("Authorization").FirstOrDefault();
-                    var responseCookie = Response.Cookies["token"];
-                    if (responseCookie != null)
-                    {
-                        responseCookie.Value = token;
-                        responseCookie.Expires = DateTime.Now.AddDays(1);
-                    }
                     Console.WriteLine(result);
                     Response.Redirect("~/Home/Login");
                 }
@@ -85,6 +82,10 @@ namespace UserManagement.Demo.Controllers
                 {
                     var result = await response.Content.ReadAsStringAsync();
                     var token = response.Headers.GetValues("Authorization").FirstOrDefault();
+                    if (token.StartsWith("Basic "))
+                    {
+                        token = token.Substring("Basic ".Length);
+                    }
                     var responseCookie = Response.Cookies["token"];
                     if (responseCookie != null)
                     {
@@ -113,7 +114,7 @@ namespace UserManagement.Demo.Controllers
                 {
                     var token = Server.HtmlEncode(cookie.Value);
                     httpClient.BaseAddress = new Uri(_endpoint);
-                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", token);
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", token);
                     var response = await httpClient.GetAsync(requestUrl);
                     if (response.IsSuccessStatusCode)
                     {

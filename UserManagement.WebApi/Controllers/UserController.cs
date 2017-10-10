@@ -74,8 +74,10 @@ namespace UserManagement.WebApi.Controllers
                     user.ModifiedBy = user.UserId;
                 }
                 user.Token = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{user.UserName}:{user.Password}"));
+                user.Password = Base64Helper.EncodeBase64(user.Password);
                 _db.User.Add(user);
-                var result = await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
+                var result = new { UserId = user.UserId };
                 response = Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
             }
 
@@ -96,6 +98,7 @@ namespace UserManagement.WebApi.Controllers
             var errors = new List<string>();
             foreach (var user in users)
             {
+                user.UserId = Guid.NewGuid();
                 user.CreatedBy = id;
                 user.ModifiedBy = id;
                 if (!ModelState.IsValidField(user.UserName))
@@ -103,6 +106,7 @@ namespace UserManagement.WebApi.Controllers
                     errors.Add(ModelState.Values.First().Errors.First().ErrorMessage);
                 }
                 user.Token = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{user.UserName}:{user.Password}"));
+                user.Password = Base64Helper.EncodeBase64(user.Password);
             }
             if (errors.Any())
             {
@@ -139,6 +143,7 @@ namespace UserManagement.WebApi.Controllers
             {
                 _db.Entry(user).State = EntityState.Modified;
                 user.Token = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{user.UserName}:{user.Password}"));
+                user.Password = Base64Helper.EncodeBase64(user.Password);
                 var result = await _db.SaveChangesAsync();
                 response = Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
             }
@@ -175,8 +180,9 @@ namespace UserManagement.WebApi.Controllers
             HttpResponseMessage response;
             try
             {
+                password = Base64Helper.EncodeBase64(password);
                 var user = await _db.User.SingleAsync(x => x.UserName == username && x.Password == password);
-                var result = user.UserId;
+                var result = new { UserId = user.UserId };
                 response = Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
                 response.Headers.Add("Authorization", "Basic " + user.Token);
             }
@@ -208,7 +214,7 @@ namespace UserManagement.WebApi.Controllers
                 {
                     var token = authenticationHeader.Parameter;
                     var user = await _db.User.SingleAsync(x => x.Token == token);
-                    var result = user.UserId;
+                    var result = new { UserId = user.UserId };
                     response = Request.CreateResponse(HttpStatusCode.OK);
                     response.Headers.Add("Authorization", "Basic " + token);
                 }

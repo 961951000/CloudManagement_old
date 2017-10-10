@@ -14,7 +14,7 @@ namespace UserManagement.Data.Models
         /// <summary>
         /// 企业编号
         /// </summary>
-        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity), Column("EnterpriseId", Order = 0)]
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.None), Column("EnterpriseId", Order = 0)]
         public Guid? EnterpriseId
         {
             set;

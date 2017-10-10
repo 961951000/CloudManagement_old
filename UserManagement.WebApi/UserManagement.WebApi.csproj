@@ -35,7 +35,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>Areas\HelpPage\App_Data\XmlDocument.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -209,6 +210,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\Base64Helper.cs" />
     <Compile Include="Helper\ExcelHelper.cs" />
     <Compile Include="Helper\HttpExtensionMethods.cs" />
     <Compile Include="Helper\IOHelper.cs" />
@@ -255,6 +257,10 @@
     <Content Include="log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Log\Debug\2017-10-10.log" />
+    <Content Include="Log\Error\2017-10-10.log" />
+    <Content Include="Log\Info\2017-10-10.log" />
+    <Content Include="Log\Warn\2017-10-10.log" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\UserWebAPI - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\UserWebAPI - Web Deploy.pubxml" />
@@ -264,7 +270,9 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

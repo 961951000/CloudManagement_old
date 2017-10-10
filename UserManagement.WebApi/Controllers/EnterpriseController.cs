@@ -63,8 +63,10 @@ namespace UserManagement.WebApi.Controllers
             }
             else
             {
+                enterprise.EnterpriseId = Guid.NewGuid();
                 _db.Enterprise.Add(enterprise);
-                var result = await _db.SaveChangesAsync();
+                await _db.SaveChangesAsync();
+                var result = new { EnterpriseId = enterprise.EnterpriseId };
                 response = Request.CreateResponse(HttpStatusCode.OK, JsonConvert.SerializeObject(result));
             }
 

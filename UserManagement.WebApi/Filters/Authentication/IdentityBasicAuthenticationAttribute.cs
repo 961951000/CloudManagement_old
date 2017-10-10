@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UserManagement.Data.Models;
 using UserManagement.WebApi.DatabaseContext;
+using UserManagement.WebApi.Helper;
 using UserManagement.WebApi.Models;
 
 namespace UserManagement.WebApi.Filters.Authentication
@@ -15,6 +16,7 @@ namespace UserManagement.WebApi.Filters.Authentication
         {
             using (var db = new SqlServerContext())
             {
+                password = Base64Helper.EncodeBase64(password);
                 if (await db.User.AnyAsync(x => x.UserName == userName && x.Password == password, cancellationToken))
                 {
                     return await Task.Run(() => new ClaimsPrincipal(new UserManage(new User { UserName = userName, Password = password })), cancellationToken);
